@@ -1,0 +1,56 @@
+server:
+  port: 8800
+
+# 数据源配置
+spring:
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: root
+    #    password: dqy54JBuYaHvErc
+    url: jdbc:mysql://127.0.0.1:3306/3unlocked?tinyInt1isBit=false&useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&rewriteBatchedStatements=true
+    hikari:
+      # 最大连接池数量
+      maximum-pool-size: 20
+      # 最小空闲线程数量
+      minimum-idle: 10
+      # 配置获取连接等待超时的时间
+      connection-timeout: 30000
+      # 校验超时时间
+      validation-timeout: 5000
+      # 空闲连接存活最大时间，默认10分钟
+      idle-timeout: 600000
+      # 此属性控制池中连接的最长生命周期，值0表示无限生命周期，默认30分钟
+      max-lifetime: 1800000
+      # 多久检查一次连接的活性
+      keepalive-time: 30000
+      connection-test-query: SELECT 1
+
+mybatis-flex:
+  configuration:
+    map-underscore-to-camel-case: false
+    # 仅在开发环境开启日志
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    logic-delete-column: isDeleted # 全局逻辑删除的实体字段名
+    normal-value-of-logic-delete: 0  # 逻辑未删除字段值
+    deleted-value-of-logic-delete: 1 # 逻辑已删除字段值
+
+# springdoc-openapi项目配置
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
+  api-docs:
+    path: /v3/api-docs
+  group-configs:
+    - group: 'default'
+      paths-to-match: '/**'
+      packages-to-scan: com.hch.cturebackend.controller
+# knife4j的增强配置，不需要增强可以不配
+knife4j:
+  enable: true
+  setting:
+    language: zh_cn
