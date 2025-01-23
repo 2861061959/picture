@@ -50,6 +50,21 @@
       <version>5.0.1</version> <!-- 版本号可根据需求选择 -->
     </dependency>
 
+    <!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-validator -->
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-validator</artifactId>
+      <version>8.0.0.Final</version>
+    </dependency>
+
+    <!-- Sa-Token 权限认证，在线文档：https://sa-token.cc -->
+    <dependency>
+      <groupId>cn.dev33</groupId>
+      <artifactId>sa-token-spring-boot-starter</artifactId>
+      <version>1.39.0</version>
+    </dependency>
+
+
 
     <dependency>
       <groupId>cn.hutool</groupId>
