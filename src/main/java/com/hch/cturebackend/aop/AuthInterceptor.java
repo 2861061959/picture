@@ -3,6 +3,7 @@ package com.hch.cturebackend.aop;
 import com.hch.cturebackend.annotation.AuthCheck;
 import com.hch.cturebackend.enums.ErrorCode;
 import com.hch.cturebackend.exception.BusinessException;
+import com.hch.cturebackend.model.entity.User;
 import com.hch.cturebackend.model.enums.UserRoleEnum;
 import com.hch.cturebackend.model.vo.LoginUserVO;
 import com.hch.cturebackend.service.UserService;
@@ -29,7 +30,7 @@ public class AuthInterceptor {
     RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
     HttpServletRequest request = ((ServletRequestAttributes) requestAttributes).getRequest();
 
-    LoginUserVO loginUser = userService.getLoginUser(request);
+    User loginUser = userService.getLoginUser(request);
     UserRoleEnum mustRoleEnum = UserRoleEnum.getEnumByValue(mustRole);
     // 不需要权限放行
     if(mustRoleEnum == null){

@@ -9,10 +9,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
-* @author sanhe
-* @description 针对表【user(用户)】的数据库操作Service
-* @createDate 2025-01-22 17:47:33
-*/
+ * @author sanhe
+ * @description 针对表【user(用户)】的数据库操作Service
+ * @createDate 2025-01-22 17:47:33
+ */
 public interface UserService extends IService<User> {
 
   /**
@@ -23,7 +23,7 @@ public interface UserService extends IService<User> {
    * @param checkPassword 确认密码
    * @return 新用户id
    */
-  long userRegister(String userAccount,String userPassword, String checkPassword);
+  long userRegister(String userAccount, String userPassword, String checkPassword);
 
 
   /**
@@ -35,6 +35,13 @@ public interface UserService extends IService<User> {
    * @return 脱敏后的用户数据
    */
   LoginUserVO userLogin(String userAccount, String userPassword, HttpServletRequest request);
+
+  /**
+   *  获取用户信息
+   * @param user 用户信息
+   * @return 用户信息
+   */
+  LoginUserVO getLoginUserVO(User user);
 
 
   /**
@@ -51,7 +58,7 @@ public interface UserService extends IService<User> {
    * @param request http的request对象
    * @return 脱敏后的用户信息
    */
-  LoginUserVO getLoginUser(HttpServletRequest request);
+  User getLoginUser(HttpServletRequest request);
 
   /**
    * 用户注销
@@ -76,4 +83,14 @@ public interface UserService extends IService<User> {
    * @return List<UserVO>
    */
   List<UserVO> getUserVOList(List<User> userList);
+
+
+  /**
+   * 是否为管理员
+   *
+   * @param user
+   * @return
+   */
+  boolean isAdmin(User user);
+
 }

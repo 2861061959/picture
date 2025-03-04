@@ -3,10 +3,12 @@ package com.hch.cturebackend.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.text.CharSequenceUtil;
+import com.hch.cturebackend.constant.CommonConstant;
 import com.hch.cturebackend.enums.ErrorCode;
 import com.hch.cturebackend.exception.BusinessException;
 import com.hch.cturebackend.exception.ThrowUtils;
 import com.hch.cturebackend.model.entity.User;
+import com.hch.cturebackend.model.enums.UserRoleEnum;
 import com.hch.cturebackend.model.vo.LoginUserVO;
 import com.hch.cturebackend.model.vo.UserVO;
 import com.hch.cturebackend.service.UserService;
@@ -91,6 +93,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
    * @param user 用户数据
    * @return 脱敏数据
    */
+  @Override
   public LoginUserVO getLoginUserVO(User user) {
     LoginUserVO loginUserVO = new LoginUserVO();
     BeanUtil.copyProperties(user, loginUserVO);
@@ -104,14 +107,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
 
   @Override
-  public LoginUserVO getLoginUser(HttpServletRequest request) {
+  public User getLoginUser(HttpServletRequest request) {
     Object user = request.getSession().getAttribute(USER_LOGIN_STATE);
     if (user == null) {
       throw new BusinessException(ErrorCode.NOT_FOUND_ERROR, "未登录");
     }
     LoginUserVO loginUserVO = new LoginUserVO();
     BeanUtil.copyProperties(user, loginUserVO);
-    return loginUserVO;
+    return (User)user;
   }
 
   @Override
@@ -139,6 +142,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
       new BusinessException(ErrorCode.NOT_FOUND_ERROR)
     );
     return userList.stream().map(this::getUserVO).toList();
+  }
+
+  @Override
+  public boolean isAdmin(User user) {
+    return user != null && UserRoleEnum.ADMIN.getValue().equals(user.getUserRole());
   }
 }
 

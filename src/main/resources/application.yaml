@@ -1,6 +1,5 @@
 server:
   port: 8800
-
 # 数据源配置
 spring:
   datasource:
@@ -26,6 +25,13 @@ spring:
       # 多久检查一次连接的活性
       keepalive-time: 30000
       connection-test-query: SELECT 1
+  profiles:
+    active: load
+  servlet:
+    multipart:
+      max-file-size: 10MB
+
+
 #  mybatis-flex
 mybatis-flex:
   configuration:

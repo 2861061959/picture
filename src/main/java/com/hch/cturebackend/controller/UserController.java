@@ -4,19 +4,18 @@ import cn.hutool.core.bean.BeanUtil;
 import com.hch.cturebackend.annotation.AuthCheck;
 import com.hch.cturebackend.common.BaseResponse;
 import com.hch.cturebackend.common.DeleteRequest;
+import com.hch.cturebackend.common.PageRequest;
 import com.hch.cturebackend.common.ResultUtils;
 import com.hch.cturebackend.constant.CommonConstant;
 import com.hch.cturebackend.enums.ErrorCode;
 import com.hch.cturebackend.exception.BusinessException;
 import com.hch.cturebackend.exception.ThrowUtils;
-import com.hch.cturebackend.model.dto.user.UserAddRequest;
-import com.hch.cturebackend.model.dto.user.UserLoginRequest;
-import com.hch.cturebackend.model.dto.user.UserRegisterRequest;
-import com.hch.cturebackend.model.dto.user.UserUpdateRequest;
+import com.hch.cturebackend.model.dto.user.*;
 import com.hch.cturebackend.model.entity.User;
 import com.hch.cturebackend.model.vo.LoginUserVO;
 import com.hch.cturebackend.model.vo.UserVO;
 import com.hch.cturebackend.service.UserService;
+import com.mybatisflex.core.paginate.Page;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -53,8 +52,9 @@ public class UserController {
 
   @GetMapping("/get/login")
   public BaseResponse<LoginUserVO> getLoginUser(HttpServletRequest request) {
-    LoginUserVO loginUser = userService.getLoginUser(request);
-    return ResultUtils.success(loginUser);
+    User loginUser = userService.getLoginUser(request);
+    LoginUserVO userVO = userService.getLoginUserVO(loginUser);
+    return ResultUtils.success(userVO);
   }
 
   @PostMapping("/login")
@@ -141,7 +141,11 @@ public class UserController {
     return ResultUtils.success(result);
   }
 
-
+  /**
+   * 修改用户
+   * @param updateRequest 用户信息
+   * @return
+   */
   @PostMapping("/update")
   @AuthCheck(mustRole = CommonConstant.DEFAULT_ADMIN)
   public BaseResponse<Boolean> updateUser(@RequestBody UserUpdateRequest updateRequest) {
@@ -153,6 +157,19 @@ public class UserController {
     boolean result = userService.updateById(user);
     ThrowUtils.throwIf(result, new BusinessException(ErrorCode.OPERATION_ERROR));
     return ResultUtils.success(result);
+  }
+
+  @PostMapping("/list/page/vo")
+  @AuthCheck(mustRole = CommonConstant.DEFAULT_ADMIN)
+  public BaseResponse<Page<UserVO>> getUserVOByPage(
+    @RequestBody UserQueryRequest userRequest
+  ) {
+    ThrowUtils.throwIf(userRequest == null, ErrorCode.PARAMS_ERROR);
+    int current = userRequest.getCurrent();
+    int pageSize = userRequest.getPageSize();
+    Page<UserVO> userVOPage = userService.queryChain()
+      .pageAs(new Page<>(current, pageSize), UserVO.class);
+    return ResultUtils.success(userVOPage);
   }
 
 
